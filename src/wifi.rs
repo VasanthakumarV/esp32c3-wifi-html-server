@@ -19,11 +19,12 @@ pub async fn start_wifi(
             .with_ssid(SSID)
             .with_password(PASSWORD.into()),
     );
-    let wifi_controller = esp_radio::wifi::WifiController::new(
+    let mut wifi_controller = esp_radio::wifi::WifiController::new(
         wifi_peripheral,
         ControllerConfig::default().with_initial_config(station_config),
     )
     .unwrap();
+    wifi_controller.set_max_tx_power(30).unwrap();
     let interfaces_station = esp_radio::wifi::Interface::station();
 
     let net_config = NetConfig::dhcpv4(DhcpConfig::default());
